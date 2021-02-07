@@ -8,7 +8,6 @@ using namespace std;
 namespace fs = std::filesystem;
 
 
-
 bool getDesktopResolution(int& screenHeight, int& screenWidth);
 
 
@@ -18,7 +17,6 @@ void RunFaceApp() {
 
 	try {
 		cv::dnn::Net dnnNet = dnn::readNetFromCaffe(fl.getModelTxt(), fl.getModel());
-		// Does not work with CUDA YET!!
 		dnnNet.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
 		dnnNet.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
 		fl.setDnnNet(dnnNet);
@@ -32,16 +30,14 @@ void RunFaceApp() {
 		return;
 	}
 
-
-	cv::Mat michael_jordan = cv::imread("../data/mj.jpg", IMREAD_COLOR);
-	cv::Mat theresa_may = cv::imread("../data/theresa_may.jpg", IMREAD_COLOR);
-	cv::Mat putin = cv::imread("../data/putin.jpg", IMREAD_COLOR);
-
-
-
+	cv::Mat michael_jordan = cv::imread("../../data/mj.jpg", IMREAD_COLOR);
+	cv::Mat theresa_may = cv::imread("../../data/theresa_may.jpg", IMREAD_COLOR);
+	cv::Mat putin = cv::imread("../../data/putin.jpg", IMREAD_COLOR);
+	cv::Rect mj_facebox;
+	fl.return_facebox(michael_jordan, mj_facebox);
+	
+	cout << mj_facebox.x << " , " << mj_facebox.y << " , " << mj_facebox.width << " , "  << mj_facebox.height;
 }
-
-
 
 
 bool getDesktopResolution(int& screenWidth, int& screenHeight) {

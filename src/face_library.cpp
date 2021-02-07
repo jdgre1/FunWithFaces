@@ -1,37 +1,41 @@
 #include <face_library.h> 
-#include <fstream>
+//#include <fstream>
 using namespace cv;
 using namespace std;
 
 
 FaceLibrary::FaceLibrary() {
 
-	/*m_api = new tesseract::TessBaseAPI();
+	/*
+    m_api = new tesseract::TessBaseAPI();
 	if (m_api->Init(NULL, "eng")) {
 		fprintf(stderr, "Could not initialize tesseract.\n");
 		exit(1);
 	}
-	m_api->SetDebugVariable("debug_file", "/dev/null");*/
+	m_api->SetDebugVariable("debug_file", "/dev/null");
+    */
 }
 
 FaceLibrary::~FaceLibrary() {}
 
+//FaceLibrary::FaceLibrary(const FaceLibrary&){
+//}
+
 std::string FaceLibrary::getModelTxt() const {
-	return m_modelTxt;;
+	return m_modelTxt;
 }
 std::string FaceLibrary::getModel() const {
-	return m_modelBin;;
+	return m_modelBin;
 }
 
-std::vector<cv::Rect> faces;
 
 // Credit: https://bewagner.net/programming/2020/04/12/building-a-face-detector-with-opencv-in-cpp/
-cv::Rect find_best_face_position(cv::Mat& detection_matrix, cv::Mat& input_img) {
+cv::Rect FaceLibrary::find_best_face_position(cv::Mat& detection_matrix, cv::Mat& input_img) {
 
     float max_confidence_threshold_ = 0.165;
     int max_area = 0.;
     cv::Rect face;
-
+    
     for (int i = 0; i < detection_matrix.rows; i++) {
         float confidence = detection_matrix.at<float>(i, 2);
 
@@ -67,14 +71,22 @@ cv::Rect find_best_face_position(cv::Mat& detection_matrix, cv::Mat& input_img) 
     return face;
 }
 
-cv::Rect FaceLibrary::return_facebox(cv::Mat& img) {
-
+void FaceLibrary::return_facebox(cv::Mat& img, cv::Rect& facebox) {
+    
     int img_height = img.rows;
     int img_width = img.cols;
     cv::Mat blob_input;
 
     // Set input blob for detections
-    cv::resize(img, blob_input, cv::Size(), 300, 300);
+    /*cv::Mat input_blob = cv::dnn::blobFromImage(frame,
+        scale_factor_,
+        cv::Size(input_image_width_, input_image_height_),
+        mean_values_,
+        false,
+        false);*/
+
+
+    cv::resize(img, blob_input, cv::Size(300, 300));
     cv::Mat blob = cv::dnn::blobFromImage(blob_input, 1.0, Size(300, 300), (104.0, 177.0, 123.0));
     m_dnnNet.setInput(blob);
 
@@ -82,8 +94,9 @@ cv::Rect FaceLibrary::return_facebox(cv::Mat& img) {
     //std::vector<cv::Mat> detections = m_dnnNet.forward();
     cv::Mat detections = m_dnnNet.forward();
    
-    cv::Rect facebox = find_best_face_position(detections, img);
-    return facebox;
+    facebox = find_best_face_position(detections, img);
+    
+    return;
 }
 
 void FaceLibrary::setDnnNet(const cv::dnn::Net& net)

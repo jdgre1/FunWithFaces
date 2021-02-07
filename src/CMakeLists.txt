@@ -15,4 +15,3 @@ target_link_libraries( ${CMAKE_PROJECT_NAME} FaceLibrary )
 target_precompile_headers(${CMAKE_PROJECT_NAME} PRIVATE ../include/pch.h)
 
 
-
