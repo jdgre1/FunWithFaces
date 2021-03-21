@@ -16,10 +16,10 @@ void RunFaceApp() {
 	FaceLibrary fl;
 
 	try {
-		cv::dnn::Net dnnNet = dnn::readNetFromCaffe(fl.getModelTxt(), fl.getModel());
-		dnnNet.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
-		dnnNet.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
-		fl.setDnnNet(dnnNet);
+		cv::dnn::Net dnn_net = dnn::readNetFromCaffe(fl.get_model_txt(), fl.get_model());
+		dnn_net.setPreferableBackend(cv::dnn::DNN_BACKEND_CUDA);
+		dnn_net.setPreferableTarget(cv::dnn::DNN_TARGET_CUDA);
+		fl.set_dnn_net(dnn_net);
 		cerr << "loaded successfully" << endl;
 
 	}
@@ -33,10 +33,12 @@ void RunFaceApp() {
 	cv::Mat michael_jordan = cv::imread("../../data/mj.jpg", IMREAD_COLOR);
 	cv::Mat theresa_may = cv::imread("../../data/theresa_may.jpg", IMREAD_COLOR);
 	cv::Mat putin = cv::imread("../../data/putin.jpg", IMREAD_COLOR);
-	cv::Rect mj_facebox;
+	cv::Rect mj_facebox, tm_facebox;
 	fl.return_facebox(michael_jordan, mj_facebox);
+	fl.return_facebox(theresa_may, tm_facebox);
 	
 	cout << mj_facebox.x << " , " << mj_facebox.y << " , " << mj_facebox.width << " , "  << mj_facebox.height;
+	fl.swap_faces(michael_jordan, mj_facebox, theresa_may, tm_facebox);
 }
 
 

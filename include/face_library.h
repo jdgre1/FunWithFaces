@@ -30,18 +30,15 @@ public:
 	// 3. Copy constructor  //FaceLibrary(const FaceLibrary&) = delete; // (if to disable copy constructor) 
 	                     
 	// DNN Model related methods
-	std::string getModelTxt() const;
-	std::string getModel() const;
-	std::string getModel_() const;
+	std::string get_model_txt() const;
+	std::string get_model() const;
 
-	void setDnnNet(const cv::dnn::Net&);
-
-	int get_int();
+	void set_dnn_net(const cv::dnn::Net&);
 
 	// Facebox methods
 	void return_facebox(cv::Mat&, cv::Rect&);
 	cv::Rect find_best_face_position(cv::Mat&, cv::Mat&);
-
+	void swap_faces(cv::Mat&, cv::Rect&, cv::Mat&, cv::Rect&);
 	
 
 private:
